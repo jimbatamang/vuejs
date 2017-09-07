@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vuejs: Task Check and Complete</title>
+	<style type="text/css">
+		table {
+			width: 100%;
+		}
+		th {
+			text-align: left;
+		}
+
+		td {
+			width: 33%;
+			vertical-align:top;
+
+		}
+	</style>
+</head>
+<body>
+
+<div id="root">
+	<table>
+		<tr>
+			<th>All task</th>
+			<th>In Progress</th>	
+			<th>Completed</th>
+		</tr>
+
+		<tr>
+			<td>
+				<div v-for="(task, index) in tasks">
+					<input type="checkbox" :name="index" :id="index" v-model="task.inProgress">
+					<label :for="index" v-text="task.label"></label>
+				</div>
+			</td>
+
+			<td>
+				<div v-for="(task, index) in inProgressTasks">
+					<input type="checkbox" :name="['progress-' + index ]" :id="['progress-' + index ]" v-model="task.completed">
+					<label :for="['progress-' + index ]" v-text="task.label"></label>
+				</div>
+			</td>
+
+			<td>
+				<div v-for="(task, index) in completedTasks">
+					<label :for="['completed-' + index ]" v-text="task.label"></label>
+				</div>
+			</td>
+		</tr>
+		
+	</table>
+
+	<div style="margin-top: 20px;">
+		<input type="text" name="newTask" placeholder="Add new task" v-model="newTask">
+		<button @click="addNewTask">Add</button>
+	</div>
+</div>
+
+<script src="https://unpkg.com/vue"></script>
+<script>
+	
+	var app = new Vue({
+		el: "#root",
+		data: {
+			newTask: '',
+			tasks:[
+				{
+					"label": "Go to Fountaingate",
+					"completed": false,
+					"inProgress": false
+				},
+
+				{
+					"label": "Morning exercise",
+					"completed": false,
+					"inProgress": false
+				},
+
+				{
+					"label": "Swimming",
+					"completed": false,
+					"inProgress": false
+				},
+
+				{
+					"label": "Learn Vuejs",
+					"completed": false,
+					"inProgress": false
+				}
+
+			]
+		},
+
+		computed: {
+			completedTasks() {
+				return this.tasks.filter(task => task.completed);
+				//return this.status;
+			},
+
+			inProgressTasks() {
+				return this.tasks.filter(task => task.inProgress && !task.completed);
+			}
+		},
+
+		methods: {
+			addNewTask(){
+				//alert('add new task');
+
+				this.tasks.push({"label": this.newTask, "completed": false});
+				this.newTask = '';
+			}
+		}
+
+	});
+
+</script>
+</body>
+</html>
